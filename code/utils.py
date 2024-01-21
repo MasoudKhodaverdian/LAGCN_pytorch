@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import torch
 
 def read_data():
     A = pd.read_csv('G:/dissertation/important/LAGCN/data/drug_dis.csv', header=None).values
@@ -11,3 +12,11 @@ def read_data():
     Sd_np = np.array(Sd)
 
     return A_np, Sr_np, Sd_np
+
+def xavier(input_dim, output_dim):
+    init_range = np.sqrt(6.0/(input_dim + output_dim))
+    r1 = -1 * init_range
+    r2 = init_range
+    initial = torch.FloatTensor(a, b).uniform_(r1, r2)
+    return initial
+
