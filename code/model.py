@@ -26,8 +26,9 @@ class LAGCN(nn.Module):
         H_3 = self.act(torch.matmul(torch.matmul(self.G,H_2),self.W_2))
         H = self.a_1 * H_1 + self.a_2 * H_2 + self.a_3 * H_3 # H is combined of H_R and H_D
         H_R,H_D = torch.split(H, [self.n_dimension,self.m_dimension ])
-        A_p = nn.Sigmoid()(torch.matmul(torch.matmul(H_R,self.W_p),torch.transpose(H_D)))
+        A_p = nn.Sigmoid()(torch.matmul(torch.matmul(H_R,self.W_p),torch.transpose(H_D,0,1)))
         return A_p
+
 
 
 
