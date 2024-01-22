@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import torch
+from sklearn.utils.class_weight import compute_class_weight
 
 def read_data():
     A = pd.read_csv('G:/dissertation/important/LAGCN/data/drug_dis.csv', header=None).values
@@ -20,3 +21,9 @@ def xavier(input_dim, output_dim):
     initial = torch.FloatTensor(a, b).uniform_(r1, r2)
     return initial
 
+def loss_function(inp,target):
+    class_weights = compute_class_weight('balanced',np.unique(inp),inp.numpy())
+    class_weights=torch.tensor(class_weights,dtype=torch.float)
+    criterion = torch.nn.CrossEntropyLoss(weight=class_weights,reduction='mean')
+    loss = criterion(inp,target)
+    return loss
