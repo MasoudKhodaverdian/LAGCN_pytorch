@@ -18,7 +18,7 @@ def xavier(input_dim, output_dim):
     init_range = np.sqrt(6.0/(input_dim + output_dim))
     r1 = -1 * init_range
     r2 = init_range
-    initial = torch.FloatTensor(a, b).uniform_(r1, r2)
+    initial = torch.FloatTensor(input_dim, output_dim).uniform_(r1, r2)
     return initial
 
 def loss_function(inp,target):
