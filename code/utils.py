@@ -24,8 +24,8 @@ def normalize_similarity_matrices(A_np, Sr_np, Sd_np):
     return Sr_norm, Sd_norm
 
 def construct_HNet(A_np,Sr_norm,Sd_norm):
-    mat1 = np.hstack((Sr_np, A_np))
-    mat2 = np.hstack((A_np.T, Sd_np))
+    mat1 = np.hstack((Sr_norm, A_np))
+    mat2 = np.hstack((A_np.T, Sd_norm))
     return np.vstack((mat1, mat2))
 
 def construct_Net(A_np):
