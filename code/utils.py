@@ -15,8 +15,8 @@ def read_data():
 
 def normalize_similarity_matrices(A_np, Sr_np, Sd_np):
     # Calculate diagonal matrices
-    Dr = np.diag(np.sum(Sr_np, axis=0))
-    Dd = np.diag(np.sum(Sd_np, axis=0))
+    Dr = np.diag(np.sum(Sr_np, axis=1))
+    Dd = np.diag(np.sum(Sd_np, axis=1))
 
     # Normalize similarity matrices
     Sr_norm = np.linalg.pinv(Dr) @ Sr_np @ np.linalg.pinv(Dr)
