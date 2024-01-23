@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import torch
 from sklearn.utils.class_weight import compute_class_weight
+from scipy.linalg import fractional_matrix_power
 
 def read_data():
     A = pd.read_csv('data/drug_dis.csv', header=None).values
@@ -19,10 +20,15 @@ def normalize_similarity_matrices(A_np, Sr_np, Sd_np):
     Dd = np.diag(np.sum(Sd_np, axis=1))
 
     # Normalize similarity matrices
-    Sr_norm = np.linalg.pinv(Dr) @ Sr_np @ np.linalg.pinv(Dr)
-    Sd_norm = np.linalg.pinv(Dd) @ Sd_np @ np.linalg.pinv(Dd)
+    # Sr_norm = np.linalg.pinv(Dr) @ Sr_np @ np.linalg.pinv(Dr)
+    # Sd_norm = np.linalg.pinv(Dd) @ Sd_np @ np.linalg.pinv(Dd)
+    Sr_norm = fractional_matrix_power(Dr, -0.5) @ Sr_np @ fractional_matrix_power(Dr, -0.5)
+    Sd_norm = fractional_matrix_power(Dd, -0.5) @ Sr_np @ fractional_matrix_power(Dd, -0.5)
     return Sr_norm, Sd_norm
 
+def normalize(inp): # notmalize a numpy array
+    D = np.diag(np.sum(inp, axis=1))
+    return fractional_matrix_power(D, -0.5) @ inp @ fractional_matrix_power(D, -0.5)
 def construct_HNet(A_np,Sr_norm,Sd_norm):
     mat1 = np.hstack((Sr_norm, A_np))
     mat2 = np.hstack((A_np.T, Sd_norm))
