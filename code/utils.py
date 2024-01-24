@@ -3,11 +3,12 @@ import pandas as pd
 import torch
 from sklearn.utils.class_weight import compute_class_weight
 from scipy.linalg import fractional_matrix_power
+import random
 
 def read_data():
-    A = pd.read_csv('data/drug_dis.csv', header=None).values
-    Sr = pd.read_csv('data/drug_sim.csv', header=None).values
-    Sd = pd.read_csv('data/dis_sim.csv', header=None).values
+    A = pd.read_csv('../data/drug_dis.csv', header=None).values
+    Sr = pd.read_csv('../data/drug_sim.csv', header=None).values
+    Sd = pd.read_csv('../data/dis_sim.csv', header=None).values
 
     A_np = np.array(A)
     Sr_np = np.array(Sr)
