@@ -14,6 +14,14 @@ def read_data():
     Sd_np = np.array(Sd)
     return A_np, Sr_np, Sd_np
 
+def normalizeAdjacency(W): # input matrix must be a symmetric matrix
+
+    assert W.shape[0] == W.shape[1]
+    d = np.sum(W, axis = 1)
+    d = 1/np.sqrt(d)
+    D = np.diag(d)
+    return D @ W @ D
+
 def normalize_similarity_matrices(A_np, Sr_np, Sd_np):
     # Calculate diagonal matrices
     Dr = np.diag(np.sum(Sr_np, axis=1))
@@ -26,9 +34,6 @@ def normalize_similarity_matrices(A_np, Sr_np, Sd_np):
     Sd_norm = fractional_matrix_power(Dd, -0.5) @ Sr_np @ fractional_matrix_power(Dd, -0.5)
     return Sr_norm, Sd_norm
 
-def normalize(inp): # notmalize a numpy array
-    D = np.diag(np.sum(inp, axis=1))
-    return fractional_matrix_power(D, -0.5) @ inp @ fractional_matrix_power(D, -0.5)
 def construct_HNet(A_np,Sr_norm,Sd_norm):
     mat1 = np.hstack((Sr_norm, A_np))
     mat2 = np.hstack((A_np.T, Sd_norm))
@@ -59,3 +64,4 @@ def loss_function(inp,target):
     criterion = torch.nn.CrossEntropyLoss(weight=class_weights,reduction='mean')
     loss = criterion(inp,target)
     return loss
+
