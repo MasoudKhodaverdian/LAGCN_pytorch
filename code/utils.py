@@ -6,13 +6,13 @@ from scipy.linalg import fractional_matrix_power
 import random
 
 def read_data():
-    A = pd.read_csv('../data/drug_dis.csv', header=None).values
-    Sr = pd.read_csv('../data/drug_sim.csv', header=None).values
-    Sd = pd.read_csv('../data/dis_sim.csv', header=None).values
+    # A = pd.read_csv('../data/drug_dis.csv', header=None).values
+    # Sr = pd.read_csv('../data/drug_sim.csv', header=None).values
+    # Sd = pd.read_csv('../data/dis_sim.csv', header=None).values
 
-    A_np = np.array(A)
-    Sr_np = np.array(Sr)
-    Sd_np = np.array(Sd)
+    A_np = np.loadtxt('../data/drug_dis.csv', delimiter=',')
+    Sr_np = np.loadtxt('../data/drug_sim.csv', delimiter=',')
+    Sd_np = np.loadtxt('../data/dis_sim.csv', delimiter=',')
     return A_np, Sr_np, Sd_np
 
 def normalizeAdjacency(W): # input matrix must be a symmetric matrix
