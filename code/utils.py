@@ -66,3 +66,14 @@ def loss_function(inp,target):
     loss = criterion(inp,target)
     return loss
 
+def split_train_test(drug_dis_matrix,ratio=0.8):
+    index_matrix = np.mat(np.where(drug_dis_matrix == 1))
+    # print(index_matrix)
+    association_nam = index_matrix.shape[1]
+    random_index = index_matrix.T.tolist()
+    random.shuffle(random_index)
+    ind = int(association_nam * ratio)
+    train = tuple(np.array(random_index[:ind]).T)
+    test = tuple(np.array(random_index[ind:]).T)
+    return train,test # these are index we can use drug_dis_matrix[test]
+
