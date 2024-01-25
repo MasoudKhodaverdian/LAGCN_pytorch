@@ -6,16 +6,14 @@ from scipy.linalg import fractional_matrix_power
 import random
 
 def read_data():
-    # A = pd.read_csv('../data/drug_dis.csv', header=None).values
-    # Sr = pd.read_csv('../data/drug_sim.csv', header=None).values
-    # Sd = pd.read_csv('../data/dis_sim.csv', header=None).values
 
     A_np = np.loadtxt('../data/drug_dis.csv', delimiter=',')
     Sr_np = np.loadtxt('../data/drug_sim.csv', delimiter=',')
     Sd_np = np.loadtxt('../data/dis_sim.csv', delimiter=',')
     return A_np, Sr_np, Sd_np
 
-def normalizeAdjacency(W): # input matrix must be a symmetric matrix
+def normalizeAdjacency(W):
+    # input matrix must be a symmetric matrix
 
     assert W.shape[0] == W.shape[1]
     d = np.sum(W, axis = 1)
@@ -29,10 +27,8 @@ def normalize_similarity_matrices(A_np, Sr_np, Sd_np):
     Dd = np.diag(np.sum(Sd_np, axis=1))
 
     # Normalize similarity matrices
-    # Sr_norm = np.linalg.pinv(Dr) @ Sr_np @ np.linalg.pinv(Dr)
-    # Sd_norm = np.linalg.pinv(Dd) @ Sd_np @ np.linalg.pinv(Dd)
     Sr_norm = fractional_matrix_power(Dr, -0.5) @ Sr_np @ fractional_matrix_power(Dr, -0.5)
-    Sd_norm = fractional_matrix_power(Dd, -0.5) @ Sr_np @ fractional_matrix_power(Dd, -0.5)
+    Sd_norm = fractional_matrix_power(Dd, -0.5) @ Sd_np @ fractional_matrix_power(Dd, -0.5)
     return Sr_norm, Sd_norm
 
 def construct_HNet(A_np,Sr_norm,Sd_norm):
