@@ -41,31 +41,31 @@ def train(model,n_epochs,inp,train_matrix):
     return best_model
 
 
-import torch
-from torch.optim.lr_scheduler import CyclicLR
-
-# neural network def
-model = YourModel()
-
-#opotimaizer and lr
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-
-# cycling lr definition
-scheduler = CyclicLR(optimizer, base_lr=0.01, max_lr=0.1, step_size_up=2000, mode='triangular')
-
-# neural network training with clr
-for epoch in range(num_epochs):
-    for batch_idx, (data, targets) in enumerate(train_loader):
-        # loss and output
-        outputs = model(data)
-        loss = criterion(outputs, targets)
-
-        # removing pre grad
-        optimizer.zero_grad()
-
-        # loss computation
-        loss.backward()
-
-        # weights updating
-        optimizer.step()
-        scheduler.step()
+# import torch
+# from torch.optim.lr_scheduler import CyclicLR
+#
+# # neural network def
+# model = YourModel()
+#
+# #opotimaizer and lr
+# optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+#
+# # cycling lr definition
+# scheduler = CyclicLR(optimizer, base_lr=0.01, max_lr=0.1, step_size_up=2000, mode='triangular')
+#
+# # neural network training with clr
+# for epoch in range(num_epochs):
+#     for batch_idx, (data, targets) in enumerate(train_loader):
+#         # loss and output
+#         outputs = model(data)
+#         loss = criterion(outputs, targets)
+#
+#         # removing pre grad
+#         optimizer.zero_grad()
+#
+#         # loss computation
+#         loss.backward()
+#
+#         # weights updating
+#         optimizer.step()
+#         scheduler.step()
