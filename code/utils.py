@@ -4,6 +4,7 @@ import torch
 from sklearn.utils.class_weight import compute_class_weight
 from scipy.linalg import fractional_matrix_power
 import random
+from sklearn import metrics
 
 def read_data():
 
@@ -86,3 +87,9 @@ def split_train_test(drug_dis_matrix,ratio=0.8):
     test = tuple(np.array(random_index[ind:]).T)
     return train,test # these are index we can use drug_dis_matrix[test]
 
+def evaluate(y,pred):
+    fpr, tpr, thresholds = metrics.roc_curve(y, pred, pos_label=1)
+    auc = metrics.auc(fpr, tpr)
+    precision, recall, thresholds = metrics.precision_recall_curve(y, pred)
+    aupr = metrics.auc(recall, precision)
+    return aupr,auc

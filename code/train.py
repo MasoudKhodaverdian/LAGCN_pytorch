@@ -28,7 +28,7 @@ def train(model,n_epochs,inp,train_matrix):
             min_loss = loss.item()
             best_model = copy.deepcopy(model)
         optimizer.step()
-    print(loss.item())
+    print('minimum loss: ',min_loss)
 
     # try:
     #     pre_best = pickle.load('best_loss.pkl')

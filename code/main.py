@@ -1,4 +1,5 @@
 from utils import read_data,normalizeAdjacency,construct_HNet,construct_Net,split_train_test,loss_function
+from utils import evaluate
 from train import train
 import torch
 from model import LAGCN
@@ -14,5 +15,11 @@ train_matrix[test_ind] = 0
 H_0 = construct_Net(train_matrix)
 train_matrix = torch.tensor(train_matrix).float()
 train_H_0 = torch.tensor(H_0).float()
-train(model,100,train_H_0,train_matrix)
+drug_dis_matrix = drug_dis_matrix.astype(int)
+
+model = train(model,500,train_H_0,train_matrix)
+pred = model(train_H_0)
+pred = pred.detach().numpy()
+aupr,auc = evaluate(drug_dis_matrix.flatten(),pred.flatten())
+print('aupr: ',aupr,' auc: ',auc)
 
