@@ -4,20 +4,15 @@ import torch
 from model import LAGCN
 import copy
 
-
-
-
 drug_dis_matrix,drug_sim,dis_sim = read_data()
 G = construct_HNet(drug_dis_matrix,drug_sim*6,dis_sim*6)
 normalized_G = torch.tensor(normalizeAdjacency(G)).float()
-H_0 = construct_Net(drug_dis_matrix)
 model = LAGCN(normalized_G,drug_sim.shape[0],dis_sim.shape[0])
 train_ind,test_ind = split_train_test(drug_dis_matrix)
-train_H_0 = copy.deepcopy(H_0)
-train_H_0[test_ind] = 0
-train_H_0 = torch.tensor(train_H_0).float()
-# print(train_H_0.dtype)
-# print(normalized_G.dtype)
-train(model,10,train_H_0)
-
+train_matrix = copy.deepcopy(drug_dis_matrix)
+train_matrix[test_ind] = 0
+H_0 = construct_Net(train_matrix)
+train_matrix = torch.tensor(train_matrix).float()
+train_H_0 = torch.tensor(H_0).float()
+train(model,100,train_H_0,train_matrix)
 

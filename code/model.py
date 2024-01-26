@@ -14,9 +14,9 @@ class LAGCN(nn.Module):
         self.W_1 = torch.nn.Parameter(xavier(k,k))
         self.W_2 = torch.nn.Parameter(xavier(k,k))
         self.W_p = torch.nn.Parameter(xavier(k,k))
-        self.a_1 = torch.nn.Parameter(1/2)
-        self.a_2 = torch.nn.Parameter(1/3)
-        self.a_3 = torch.nn.Parameter(1/4)
+        self.a_1 = torch.nn.Parameter(torch.tensor(1/2))
+        self.a_2 = torch.nn.Parameter(torch.tensor(1/3))
+        self.a_3 = torch.nn.Parameter(torch.tensor(1/4))
         self.act = nn.ELU()
 
 

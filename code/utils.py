@@ -60,11 +60,24 @@ def xavier(input_dim, output_dim):
 
 
 def loss_function(inp,target):
-    class_weights = compute_class_weight('balanced',np.unique(inp),inp.numpy())
-    class_weights=torch.tensor(class_weights,dtype=torch.float)
+    class_weights = compute_class_weight(class_weight='balanced',classes=np.unique(inp),y=inp.numpy().flatten().tolist())
+    class_weights=torch.tensor([class_weights[0]],dtype=torch.float)
     criterion = torch.nn.CrossEntropyLoss(weight=class_weights,reduction='mean')
+    inp = torch.flatten(inp)
+    target = torch.flatten(target)
+    inp = inp[:, None]
+    target = target[:, None]
     loss = criterion(inp,target)
     return loss
+
+def loss_function_2(inp,target):
+    N = inp.size()[0]
+    M = inp.size()[1]
+    inp_np = inp.numpy()
+    landa = np.count_nonzero(inp_np==0)/np.count_nonzero(inp_np)
+    s = landa * inp * torch.log(target) + (1-inp) * torch.log(1-target)
+    s = (-1/(M*N)) * torch.sum(s)
+    return s
 
 def split_train_test(drug_dis_matrix,ratio=0.8):
     index_matrix = np.mat(np.where(drug_dis_matrix == 1))
