@@ -9,7 +9,7 @@ the original paper name is  "Predicting Drug-Disease Associations through Layer 
 
 ### Usage
 ```shell
-git https://github.com/MasoudKhodaverdian/LAGCN_pytorch.git
+git clone https://github.com/MasoudKhodaverdian/LAGCN_pytorch.git
 cd LAGCN_pytorch/code
 python main.py
 ```
