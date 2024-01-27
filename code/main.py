@@ -17,9 +17,9 @@ train_matrix = torch.tensor(train_matrix).float()
 train_H_0 = torch.tensor(H_0).float()
 drug_dis_matrix = drug_dis_matrix.astype(int)
 
-model = train(model,500,train_H_0,train_matrix)
+model = train(model,4000,train_H_0,train_matrix)
 pred = model(train_H_0)
 pred = pred.detach().numpy()
-aupr,auc = evaluate(drug_dis_matrix.flatten(),pred.flatten())
+aupr,auc = evaluate(drug_dis_matrix[train_matrix==0].flatten(),pred[train_matrix==0].flatten())
 print('aupr: ',aupr,' auc: ',auc)
 
