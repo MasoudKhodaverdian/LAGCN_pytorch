@@ -8,7 +8,7 @@ import copy
 drug_dis_matrix,drug_sim,dis_sim = read_data()
 G = construct_HNet(drug_dis_matrix,drug_sim*6,dis_sim*6)
 normalized_G = torch.tensor(normalizeAdjacency(G)).float()
-model = LAGCN(normalized_G,drug_sim.shape[0],dis_sim.shape[0])
+model = LAGCN(normalized_G,drug_sim.shape[0],dis_sim.shape[0],k=64)
 train_ind,test_ind = split_train_test(drug_dis_matrix)
 train_matrix = copy.deepcopy(drug_dis_matrix)
 train_matrix[test_ind] = 0
@@ -22,4 +22,5 @@ pred = model(train_H_0)
 pred = pred.detach().numpy()
 aupr,auc = evaluate(drug_dis_matrix[train_matrix==0].flatten(),pred[train_matrix==0].flatten())
 print('aupr: ',aupr,' auc: ',auc)
+
 
