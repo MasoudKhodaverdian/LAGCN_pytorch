@@ -20,7 +20,8 @@ drug_dis_matrix = drug_dis_matrix.astype(int)
 model = train(model,4000,train_H_0,train_matrix)
 pred = model(train_H_0)
 pred = pred.detach().numpy()
-aupr,auc = evaluate(drug_dis_matrix[train_matrix==0].flatten(),pred[train_matrix==0].flatten())
+aupr,auc,accuracy,f1 = evaluate(drug_dis_matrix[train_matrix==0].flatten(),pred[train_matrix==0].flatten())
 print('aupr: ',aupr,' auc: ',auc)
+print('f1: ',f1,'accuracy: ',accuracy)
 
 

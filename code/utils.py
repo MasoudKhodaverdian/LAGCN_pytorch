@@ -5,6 +5,7 @@ from sklearn.utils.class_weight import compute_class_weight
 from scipy.linalg import fractional_matrix_power
 import random
 from sklearn import metrics
+import copy
 
 def read_data():
 
@@ -90,6 +91,13 @@ def split_train_test(drug_dis_matrix,ratio=0.8):
 def evaluate(y,pred):
     fpr, tpr, thresholds = metrics.roc_curve(y, pred, pos_label=1)
     auc = metrics.auc(fpr, tpr)
+    optimal_idx = np.argmax(tpr - fpr)
+    optimal_threshold = thresholds[optimal_idx]
+    new_pred = copy.deepcopy(pred)
+    new_pred[new_pred<=optimal_threshold] = 0
+    new_pred[new_pred>optimal_threshold] = 1
+    accuracy = metrics.accuracy_score(y,new_pred)
+    f1 = metrics.f1_score(y,new_pred)
     precision, recall, thresholds = metrics.precision_recall_curve(y, pred)
     aupr = metrics.auc(recall, precision)
-    return aupr,auc
+    return aupr,auc,accuracy,f1
