@@ -101,3 +101,11 @@ def evaluate(y,pred):
     precision, recall, thresholds = metrics.precision_recall_curve(y, pred)
     aupr = metrics.auc(recall, precision)
     return aupr,auc,accuracy,f1
+
+def node_dropout(x, keep_prob, num_nonzero_elems):
+    noise_shape = x.size()
+    random_tensor = keep_prob
+    random_tensor += torch.rand(noise_shape)
+    dropout_mask = torch.floor(random_tensor).to(torch.bool)
+    pre_out = x * dropout_mask
+    return pre_out*(1./keep_prob)

@@ -1,15 +1,16 @@
 import torch
-from utils import loss_function,loss_function_2
+from utils import loss_function,loss_function_2,evaluate
 import torch.optim as optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau,CyclicLR
 import copy
 import pickle
 from tqdm import tqdm
 from functools import partial
+import numpy as np
 
 tqdm = partial(tqdm, position=0, leave=True)
 
-def train(model,n_epochs,inp,train_matrix):
+def train(model,n_epochs,inp,train_matrix,drug_dis_matrix,train_H_0):
     if torch.cuda.is_available():
         device = torch.device("cuda")
     else:
@@ -19,8 +20,9 @@ def train(model,n_epochs,inp,train_matrix):
     model.train()
     optimizer = optim.Adam(model.parameters(), lr=0.008)
     # scheduler = ReduceLROnPlateau(optimizer, 'min')
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=0.01,step_size_up=int(n_epochs/2),mode='exp_range',gamma=0.8,cycle_momentum=False)
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=0.01,step_size_up=40,mode='exp_range',gamma=0.995,cycle_momentum=False)
     min_loss = float('inf')
+    max_f1 = -1*float('inf')
     for epoch in tqdm(range(n_epochs),desc="traning"):
         optimizer.zero_grad()
         target = model(inp)
@@ -28,9 +30,21 @@ def train(model,n_epochs,inp,train_matrix):
         # scheduler.step(loss)
 
         loss.backward()
-        if loss.item() < min_loss :
-            min_loss = loss.item()
-            best_model = copy.deepcopy(model)
+        # if loss.item() < min_loss :
+        #     min_loss = loss.item()
+        #     best_model = copy.deepcopy(model)
+        ################ new ####################
+        model.eval()
+        pred = model(train_H_0)
+        pred = pred.detach().numpy()
+        if not np.isnan(pred).any():
+            aupr,auc,accuracy,f1 = evaluate(drug_dis_matrix[train_matrix==0].flatten(),pred[train_matrix==0].flatten())
+            if f1 > max_f1 :
+                max_f1 = f1
+                best_model = copy.deepcopy(model)
+                min_loss = loss.item()
+        model.train()
+        ################ end new ##################
         optimizer.step()
         scheduler.step()
         if epoch % 100 == 1 :
